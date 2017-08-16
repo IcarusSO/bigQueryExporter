@@ -51,7 +51,7 @@ class BigQueryExporter:
         
         # logging
         timeElapsed=datetime.now()-startTime 
-        logging.warning('[BigQueryExporter] ['+job_name+'] ::query_to_table completed, elpased {}s'.format(timeElapsed.seconds))
+        logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_table completed, elpased {}s'.format(timeElapsed.seconds))
         
         return destination_table
         
@@ -84,7 +84,7 @@ class BigQueryExporter:
             
         # logging
         timeElapsed=datetime.now()-startTime 
-        logging.warning('[BigQueryExporter] ['+job_name+'] ::table_to_gs completed, elpased {}s'.format(timeElapsed.seconds))
+        logging.info('[BigQueryExporter] ['+job_name+'] ::table_to_gs completed, elpased {}s'.format(timeElapsed.seconds))
         
         return bucket
             
@@ -112,7 +112,7 @@ class BigQueryExporter:
         
         # logging
         timeElapsed=datetime.now()-startTime 
-        logging.warning('[BigQueryExporter] ['+job_name+'] ::gs_to_local completed, elpased {}s'.format(timeElapsed.seconds))
+        logging.info('[BigQueryExporter] ['+job_name+'] ::gs_to_local completed, elpased {}s'.format(timeElapsed.seconds))
         
         
     def query_to_local(self, query, job_name, data_dir_path):
@@ -126,4 +126,4 @@ class BigQueryExporter:
         
         # logging
         timeElapsed=datetime.now()-startTime 
-        logging.warning('[BigQueryExporter] ['+job_name+'] ::query_to_local completed, elpased {}s'.format(timeElapsed.seconds))
+        logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_local completed, elpased {}s'.format(timeElapsed.seconds))
