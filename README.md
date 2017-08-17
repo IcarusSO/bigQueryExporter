@@ -1,6 +1,10 @@
 # bigQueryExporter
 Export query data from google bigquery to local machine
 
+#### Installation
+    pip install bigQueryExporter
+    pip3 install bigQueryExporter
+
 #### Example
     from bigQueryExport import BigQueryExporter
     bigQueryExporter = BigQueryExporter(project_name, dataset_name, bucket_name)
