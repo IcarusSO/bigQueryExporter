@@ -10,6 +10,7 @@ setup(
   keywords = ['bigquery', 'local', 'export'], # arbitrary keywords
   classifiers = [],
   install_requires=[
+    'google-cloud',
     'google-cloud-bigquery',
     'google-cloud-storage'
   ]
