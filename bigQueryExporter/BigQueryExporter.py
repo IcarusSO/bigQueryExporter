@@ -114,6 +114,18 @@ class BigQueryExporter:
         timeElapsed=datetime.now()-startTime 
         logging.info('[BigQueryExporter] ['+job_name+'] ::gs_to_local completed, elpased {}s'.format(timeElapsed.seconds))
         
+    def query_to_gs(self, query, job_name):
+        #logging
+        logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_gs start')
+        startTime= datetime.now()
+        
+        destination_table = self.query_to_table(query, job_name)
+        bucket = self.table_to_gs(destination_table, job_name)
+        
+        # logging
+        timeElapsed=datetime.now()-startTime 
+        logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_gs completed, elpased {}s'.format(timeElapsed.seconds))
+        
         
     def query_to_local(self, query, job_name, data_dir_path):
         #logging
