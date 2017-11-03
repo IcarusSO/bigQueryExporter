@@ -11,6 +11,12 @@ from google.cloud.bigquery.dataset import Dataset
 
 
 class BigQueryExporter:
+    _use_cache = False
+    
+    @staticmethod
+    def use_cache(is_use_cache=True):
+        BigQueryExporter._use_cache = is_use_cache
+    
     def __init__(self, project_name, dataset_name, bucket_name):
         self.project_name = project_name
         self.dataset_name = dataset_name
@@ -21,6 +27,10 @@ class BigQueryExporter:
         
         
     def query_to_table(self, query, job_name):
+        # Do nothing if use_cache
+        if BigQueryExporter._use_cache:
+            return
+        
         #logging
         logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_table start')
         startTime= datetime.now()
@@ -42,6 +52,7 @@ class BigQueryExporter:
         unique_id = str(uuid.uuid4())
         job = bigquery_client.run_async_query(unique_id, query)
         job.allow_large_results = True
+        job.use_legacy_sql = False
         job.destination = destination_table
         job.begin()
         
@@ -115,6 +126,10 @@ class BigQueryExporter:
         logging.info('[BigQueryExporter] ['+job_name+'] ::gs_to_local completed, elpased {}s'.format(timeElapsed.seconds))
         
     def query_to_gs(self, query, job_name):
+        # Do nothing if use_cache
+        if BigQueryExporter._use_cache:
+            return
+        
         #logging
         logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_gs start')
         startTime= datetime.now()
@@ -128,6 +143,10 @@ class BigQueryExporter:
         
         
     def query_to_local(self, query, job_name, data_dir_path):
+        # Do nothing if use_cache
+        if BigQueryExporter._use_cache:
+            return
+        
         #logging
         logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_local start')
         startTime= datetime.now()
@@ -139,3 +158,4 @@ class BigQueryExporter:
         # logging
         timeElapsed=datetime.now()-startTime 
         logging.info('[BigQueryExporter] ['+job_name+'] ::query_to_local completed, elpased {}s'.format(timeElapsed.seconds))
+        

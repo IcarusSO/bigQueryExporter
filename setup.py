@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
   name = 'bigQueryExporter',
   packages = ['bigQueryExporter'], # this must be the same as the name above
-  version = '0.0.3',
+  version = '0.0.4',
   description = 'Package codes to execute queries on BigQuery and save to local machine',
   author = 'Icarus So',
   author_email = 'icarus.so@gmail.com',
