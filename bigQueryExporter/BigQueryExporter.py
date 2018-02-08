@@ -28,6 +28,7 @@ class BigQueryExporter:
         
     def query_to_table(self, query, job_name):
         # Do nothing if use_cache
+        
         if BigQueryExporter._use_cache:
             return
         
@@ -40,21 +41,27 @@ class BigQueryExporter:
         bigquery_client = self.bigquery_client
         
         # Point to the dataset and table
-        destination_dataset = Dataset(dataset_name, bigquery_client)
-        destination_table = Table(job_name, destination_dataset)
+        destination_dataset = self.bigquery_client.dataset(dataset_name)
+        destination_table = destination_dataset.table(job_name)
 
         # Create an empty table
-        if destination_table.exists():
-            destination_table.delete()
-        destination_table.create()
+        try:
+            self.bigquery_client.get_table(destination_table)
+            self.bigquery_client.delete_table(destination_table)
+        except:
+            pass
+        self.bigquery_client.create_table(Table(destination_table))
+        # destination_table.create()
         
         # Execute the job and save to table
-        unique_id = str(uuid.uuid4())
-        job = bigquery_client.run_async_query(unique_id, query)
-        job.allow_large_results = True
-        job.use_legacy_sql = False
-        job.destination = destination_table
-        job.begin()
+        # unique_id = str(uuid.uuid4())
+        # job = bigquery_client.run_async_query(unique_id, query)
+        job_config = bigquery.QueryJobConfig()
+        job_config.allow_large_results = True
+        job_config.use_legacy_sql = False
+        job_config.destination = destination_table
+        
+        job = self.bigquery_client.query(query, job_config=job_config)
         
         # Wait till the job done
         while not job.done():
@@ -84,10 +91,11 @@ class BigQueryExporter:
             blob.delete()
         
         # Execute the job and save to google storage
-        unique_id = str(uuid.uuid4())
+        # unique_id = str(uuid.uuid4())
         file_destination = 'gs://' +bucket_name+ '/' +job_name+ '/out-*.csv'
-        job = bigquery_client.extract_table_to_storage(unique_id, destination_table, file_destination)
-        job.begin()
+        # job = bigquery_client.extract_table_to_storage(unique_id, destination_table, file_destination)
+        job = bigquery_client.extract_table(destination_table, file_destination)
+        # job.begin()
         
         # Wait till the job done
         while not job.done():
